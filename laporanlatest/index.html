@@ -1,0 +1,102 @@
+<?php include 'db_connection.php'; ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report Table</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    .input-text {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .select-dropdown {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .readonly {
+      background-color: #f2f2f2;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Report Table</h1>
+  <table id="report-table">
+    <thead>
+      <tr>
+        <th>Location</th>
+        <th>Area</th>
+        <th>Zone</th>
+        <th>DUN</th>
+        <th>Parlimen</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="text" class="input-text" placeholder="Enter location"></td>
+        <td>
+          <select class="select-dropdown">
+            <option value="" selected disabled>Choose area...</option>
+            <option value="Area 1">Area 1</option>
+            <option value="Area 2">Area 2</option>
+            <option value="Area 3">Area 3</option>
+          </select>
+        </td>
+        <td ></td>
+        <td ></td>
+        <td ></td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  <button id="add-row-btn">Add Row</button>
+
+  <script>
+    const addRowBtn = document.getElementById('add-row-btn');
+    const tableBody = document.querySelector('#report-table tbody');
+
+    addRowBtn.addEventListener('click', () => {
+      const newRow = tableBody.insertRow();
+      for (let i = 0; i < 5; i++) { // Number of columns
+        const cell = newRow.insertCell();
+        if (i === 0 || i === 1) { // Location and Area columns
+          const input = document.createElement(i === 1 ? 'select' : 'input');
+          input.type = i === 1 ? 'select' : 'text';
+          input.className = i === 1 ? 'select-dropdown' : 'input-text';
+          input.placeholder = i === 1 ? 'Choose area...' : `Enter ${['location', 'zone', 'DUN', 'Parlimen'][i]}`;
+          if (i === 1) { // Add options to the select element
+            const options = ['Choose area...', 'Area 1', 'Area 2', 'Area 3'];
+            options.forEach((optionText, index) => {
+              const option = document.createElement('option');
+              option.value = index === 0 ? '' : optionText;
+              option.text = optionText;
+              input.appendChild(option);
+            });
+          }
+          cell.appendChild(input);
+        } else { // Read-only columns
+          cell.classList.add('readonly');
+        }
+      }
+    });
+  </script>
+</body>
+</html>
